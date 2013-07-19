@@ -17,7 +17,6 @@ public class BeanToInject {
     
  
     public String printMessage(){
-        if(documento!=null) System.out.println("NOT NULL");
         return documento.getRootElement().getName();
     }
     
