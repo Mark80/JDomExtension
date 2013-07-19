@@ -65,7 +65,7 @@ import com.javaitaly.main.annotation.XMLDocumentImpl;
 
     @Override
     public String getName() {
-        return "document";
+        return path;
     }
 
     @Override
