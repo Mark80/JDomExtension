@@ -36,6 +36,8 @@ public class TestExtension {
     @Test
     public void test() {
         String root=bean.printMessage();
+        String root2=bean.printMessage2();
         Assert.assertEquals("primo",root);
+        Assert.assertEquals("secondo",root2);
     }
 }

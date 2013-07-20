@@ -22,8 +22,8 @@ public class JDomExtension<X> implements Extension {
     private final Set<String> pathValue = new HashSet<String>();
 
 
-    public void addDocumentBean(@Observes AfterBeanDiscovery afterBeanDiscovery,final BeanManager beanManager) {
-       final InjectionTarget<Document> injectionTarget = beanManager.createInjectionTarget(beanManager
+    public void addDocumentBean(@Observes AfterBeanDiscovery afterBeanDiscovery, final BeanManager beanManager) {
+        final InjectionTarget<Document> injectionTarget = beanManager.createInjectionTarget(beanManager
                 .createAnnotatedType(Document.class));
         for (String path : pathValue) {
             System.out.println(path);
@@ -32,7 +32,7 @@ public class JDomExtension<X> implements Extension {
     }
 
     public void processAnnotatedType(@Observes ProcessInjectionTarget<X> pit) {
-        pit.setInjectionTarget(new InjectionTargetWrapped<X>(pit.getInjectionTarget(),new InjectXmlFileSystem<X>()));
+        pit.setInjectionTarget(new InjectionTargetWrapped<X>(pit.getInjectionTarget(), new InjectXmlFileSystem<X>()));
         for (InjectionPoint in : getInjectionPoints(pit)) {
             addXmlPathFromQualifiers(in.getQualifiers());
         }
@@ -47,11 +47,12 @@ public class JDomExtension<X> implements Extension {
             if (isXMLDocumnetAnnotation(ann)) {
                 final XMLDocument dodxml = (XMLDocument) ann;
                 pathValue.add(dodxml.path());
+                System.out.println(dodxml.path());
             }
         }
     }
-    
-    private boolean isXMLDocumnetAnnotation(Annotation ann){
+
+    private boolean isXMLDocumnetAnnotation(Annotation ann) {
         return ann.annotationType().equals(XMLDocument.class);
     }
 }

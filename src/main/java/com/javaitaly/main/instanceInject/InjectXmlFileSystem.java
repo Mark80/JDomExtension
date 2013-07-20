@@ -8,6 +8,7 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.javaitaly.main.annotation.PathPrefix;
 import com.javaitaly.main.annotation.XMLDocument;
 
 public class InjectXmlFileSystem<X> extends InjectXmlScheleton<X> {
@@ -27,9 +28,19 @@ public class InjectXmlFileSystem<X> extends InjectXmlScheleton<X> {
         return docResult;
     }
 
-    private String getPath(final Field field) {
+    private String getPath(final Field field) {     
+        String prefix=getPrefixForFile(field);
         final XMLDocument xmlAnnotation = field.getAnnotation(XMLDocument.class);
-        final String path = xmlAnnotation.path() + ".xml";
+        final String path = prefix+xmlAnnotation.path() + ".xml";
         return path;
+    }
+    
+    private String getPrefixForFile(final Field field){
+        PathPrefix pathPrefix=field.getDeclaringClass().getAnnotation(PathPrefix.class);
+        String prefix="";
+        if(pathPrefix!=null){            
+            prefix=prefix+pathPrefix.prefix();
+        }       
+        return prefix;
     }
 }
