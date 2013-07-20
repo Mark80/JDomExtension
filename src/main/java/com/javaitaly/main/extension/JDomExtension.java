@@ -16,7 +16,7 @@ import org.jdom.Document;
 
 import com.javaitaly.main.annotation.XMLDocument;
 import com.javaitaly.main.instanceInject.InjectXmlFileSystem;
-import com.javaitaly.main.instanceInject.PrefixProvider;
+import com.javaitaly.main.instanceInject.PathProvider;
 
 public class JDomExtension<X> implements Extension {
 
@@ -33,7 +33,7 @@ public class JDomExtension<X> implements Extension {
     }
 
     public void processAnnotatedType(@Observes ProcessInjectionTarget<X> pit) {
-        pit.setInjectionTarget(new InjectionTargetWrapped<X>(pit.getInjectionTarget(), new InjectXmlFileSystem<X>(new PrefixProvider())));
+        pit.setInjectionTarget(new InjectionTargetWrapped<X>(pit.getInjectionTarget(), new InjectXmlFileSystem<X>(new PathProvider())));
         for (InjectionPoint in : getInjectionPoints(pit)) {
             addXmlPathFromQualifiers(in.getQualifiers());
         }

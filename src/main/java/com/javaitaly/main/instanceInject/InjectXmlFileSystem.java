@@ -3,21 +3,17 @@ package com.javaitaly.main.instanceInject;
 import java.io.File;
 import java.lang.reflect.Field;
 
-import com.javaitaly.main.annotation.XMLDocument;
-
 public class InjectXmlFileSystem<X> extends InjectXmlScheleton<X> {
  
-   private PrefixProvider prefixProvider;
+   private PathProvider pathProvider;
 
-    public InjectXmlFileSystem(PrefixProvider prefixProvider) {
+    public InjectXmlFileSystem(PathProvider pathProvider) {
 	super();
-	this.prefixProvider = prefixProvider;
+	this.pathProvider = pathProvider;
 }
 
-	public File getFile(final Field field) {     
-        String prefix=prefixProvider.getPrefixForFile(field);
-        final XMLDocument xmlAnnotation = field.getAnnotation(XMLDocument.class);
-        final String path = prefix+xmlAnnotation.path() + ".xml";
+	public File getFile(final Field field) {    
+        final String path =pathProvider.getFilePath(field);
         return new File(path);
     }
     
