@@ -44,7 +44,7 @@ public class JDomExtension<X> implements Extension {
 
     private void addXmlPathFromQualifiers(Set<Annotation> qualifiers) {
         for (Annotation ann : qualifiers) {
-            if (isXMLDocumnetAnnotation(ann)) {
+            if (isXMLDocumentAnnotation(ann)) {
                 final XMLDocument dodxml = (XMLDocument) ann;
                 pathValue.add(dodxml.path());
                 System.out.println(dodxml.path());
@@ -52,7 +52,7 @@ public class JDomExtension<X> implements Extension {
         }
     }
 
-    private boolean isXMLDocumnetAnnotation(Annotation ann) {
+    private boolean isXMLDocumentAnnotation(Annotation ann) {
         return ann.annotationType().equals(XMLDocument.class);
     }
 }
