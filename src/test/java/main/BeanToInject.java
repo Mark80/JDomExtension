@@ -1,13 +1,12 @@
 package main;
 
-import javax.inject.Named;
 
 import org.jdom.Document;
 
 import com.javaitaly.main.annotation.PathPrefix;
 import com.javaitaly.main.annotation.XMLDocument;
 
-@Named
+
 @PathPrefix(prefix="xml/")
 public class BeanToInject {
     

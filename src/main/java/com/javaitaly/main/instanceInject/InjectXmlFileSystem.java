@@ -3,6 +3,8 @@ package com.javaitaly.main.instanceInject;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import com.javaitaly.main.fileProvider.PathProvider;
+
 public class InjectXmlFileSystem<X> extends InjectXmlScheleton<X> {
  
    private PathProvider pathProvider;

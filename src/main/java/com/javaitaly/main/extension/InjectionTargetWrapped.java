@@ -1,5 +1,6 @@
 package com.javaitaly.main.extension;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Set;
 
@@ -7,17 +8,27 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.InjectionTarget;
 
-import com.javaitaly.main.instanceInject.InjectXmlInstance;
+import org.jdom.Document;
+
+import com.javaitaly.main.annotation.XMLDocument;
+import com.javaitaly.main.documentCreator.DocumentCreator;
+import com.javaitaly.main.fileProvider.FileProvider;
+import com.javaitaly.main.instanceInject.InjectFieldObject;
+
 
 class InjectionTargetWrapped<X> implements InjectionTarget<X> {
 
     private final InjectionTarget<X> wrappedInjectionTarget;
-    private final InjectXmlInstance<X> injector;
+    private final InjectFieldObject<X> injector;
+    private final DocumentCreator documentCreator;
+    private final FileProvider fileProvider;
 
-    InjectionTargetWrapped(final InjectionTarget<X> wrappedInjectionTarget,final InjectXmlInstance<X> injector) {
+    InjectionTargetWrapped(final InjectionTarget<X> wrappedInjectionTarget,final InjectFieldObject<X> injector,DocumentCreator documentCreator,FileProvider fileProvider) {
         super();
         this.wrappedInjectionTarget = wrappedInjectionTarget;
         this.injector=injector;
+        this.documentCreator=documentCreator;
+        this.fileProvider=fileProvider;
     }
 
     @Override
@@ -40,8 +51,16 @@ class InjectionTargetWrapped<X> implements InjectionTarget<X> {
         final Class<? extends Object> clazz = instance.getClass();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            injector.setFieldDocumentInstance(field, instance);
+        	 if(isDocumentInjectableInto(field)) {
+            File filexml=fileProvider.getFile(field);
+            Document document=documentCreator.createJDocument(filexml);          
+            injector.setFieldObjectInstance(field, instance, document);
+            }
         }
+    }
+    
+    private boolean isDocumentInjectableInto(final Field field) {
+        return field.isAnnotationPresent(XMLDocument.class) && field.getType().isAssignableFrom(Document.class);
     }
 
     @Override
@@ -53,5 +72,5 @@ class InjectionTargetWrapped<X> implements InjectionTarget<X> {
     public void preDestroy(X instance) {
         wrappedInjectionTarget.preDestroy(instance);
     }
-
-}
+    
+    }
